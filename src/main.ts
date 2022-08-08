@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { BetterValidationPipe } from 'src/pipes/better-validator.pipe';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -14,6 +15,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
+
+  app.useGlobalPipes(new BetterValidationPipe());
 
   await app.listen(PORT, () => console.log(`Server started on ${PORT} port`));
 }
