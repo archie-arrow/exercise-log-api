@@ -4,6 +4,9 @@
 
 The API for Exercise.log web application.
 
+## Docs
+[Swagger Documentation](https://app.swaggerhub.com/apis-docs/archie-arrow/exercise.log/1.1)
+
 ## Installation
 
 ```bash
