@@ -28,6 +28,9 @@ export class User {
 
   @ApiProperty({ example: '62f1143409793deaec166cad' })
   id: string;
+
+  @Prop({ select: false })
+  resetToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

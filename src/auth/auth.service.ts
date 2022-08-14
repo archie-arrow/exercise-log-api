@@ -1,16 +1,19 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponseDto } from 'src/auth/dto/auth-response.dto';
+import { ForgotPasswordDto } from 'src/auth/dto/forgot-password.dto';
 import { LoginDto } from 'src/auth/dto/login.dto';
 import { UserPayloadDto } from 'src/auth/dto/user-payload.dto';
+import { MailService } from 'src/mail/mail.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { ResetPasswordDto } from 'src/users/dto/reset-password.dto';
 import { User } from 'src/users/users.schema';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService, private jwtService: JwtService) {}
+  constructor(private usersService: UsersService, private jwtService: JwtService, private mailService: MailService) {}
 
   async login(loginDto: LoginDto): Promise<AuthResponseDto> {
     const user = await this.validateUser(loginDto);
@@ -40,8 +43,31 @@ export class AuthService {
     };
   }
 
+  async forgotPassword({ email }: ForgotPasswordDto, url: URL): Promise<void> {
+    const user = await this.usersService.getUserByEmail(email);
+    if (user) {
+      const token = this.jwtService.sign(this.createTokenPayload(user), { expiresIn: '1h' });
+      url.searchParams.append('token', token);
+
+      await this.mailService.sendResetPassword(user, token, url.toString());
+      await this.usersService.setResetToken(user, token);
+    }
+    return;
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
+    try {
+      const tokenPayload = await this.jwtService.verify(resetPasswordDto.token);
+      const hashPassword = await bcrypt.hash(resetPasswordDto.password, 12);
+      await this.usersService.resetUserPassword(tokenPayload.id, hashPassword);
+      return;
+    } catch (e) {
+      throw new BadRequestException('Token is expired or incorrect!');
+    }
+  }
+
   private async validateUser(dto: LoginDto): Promise<Omit<User, 'password'>> {
-    const user = await this.usersService.getUserByEmail(dto.email, true);
+    const user = await this.usersService.getUserByEmail(dto.email, ['+password']);
     if (!user) throw new UnauthorizedException({ message: 'Wrong email or password!' });
 
     const { password, ...responseUser } = JSON.parse(JSON.stringify(user));

@@ -12,7 +12,7 @@ import * as sendInBlue from 'nodemailer-sendinblue-transport';
       useFactory: (config: ConfigService) => ({
         transport: sendInBlue({ apiKey: config.get<string>('MAIL_TOKEN') }),
         defaults: {
-          from: `"Exercise.log" ${config.get<string>('MAIL_FROM')}`,
+          from: `"Exercise.log" <${config.get<string>('MAIL_FROM')}>`,
         },
         template: {
           dir: join(__dirname, 'templates'),
