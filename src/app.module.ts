@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ExercisesModule } from './exercises/exercises.module';
 import { DatabaseModule } from './database/database.module';
 import { SetsModule } from './sets/sets.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SetsModule } from './sets/sets.module';
     ExercisesModule,
     DatabaseModule,
     SetsModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],
