@@ -21,9 +21,9 @@ async function bootstrap() {
   app.useGlobalPipes(new BetterValidationPipe());
 
   app.enableCors({
-    origin: '*',
-    methods: ['PUT', 'POST', 'GET', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
-    allowedHeaders: ['Origin', 'X-Requested', 'Content-Type', 'Accept Authorization'],
+    origin: 'http://localhost:4200',
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
   });
 
   app.use(addHeaders);
