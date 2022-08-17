@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { addHeaders } from 'src/middlewares/add-headers.middleware';
 import { BetterValidationPipe } from 'src/pipes/better-validator.pipe';
 import { AppModule } from './app.module';
 
@@ -21,9 +22,11 @@ async function bootstrap() {
 
   app.enableCors({
     origin: '*',
-    methods: ['PUT', 'POST', 'GET', 'PATCH', 'DELETE', 'OPTIONS'],
+    methods: ['PUT', 'POST', 'GET', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
     allowedHeaders: ['Origin', 'X-Requested', 'Content-Type', 'Accept Authorization'],
   });
+
+  app.use(addHeaders);
 
   await app.listen(PORT, () => console.log(`Server started on ${PORT} port`));
 }
