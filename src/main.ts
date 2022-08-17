@@ -20,9 +20,10 @@ async function bootstrap() {
   app.useGlobalPipes(new BetterValidationPipe());
 
   app.enableCors({
-    origin: false,
+    origin: '*',
     methods: ['PUT', 'POST', 'GET', 'PATCH', 'DELETE'],
-  }),
+    allowedHeaders: ['Origin', 'X-Requested', 'Content-Type', 'Accept Authorization'],
+  });
 
   await app.listen(PORT, () => console.log(`Server started on ${PORT} port`));
 }
