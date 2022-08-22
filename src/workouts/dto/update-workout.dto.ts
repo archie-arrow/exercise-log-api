@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Exercise } from 'src/exercises/exercises.schema';
 
-export class UpdateSetDto {
+export class UpdateWorkoutDto {
   @ApiProperty({ example: 'Day 1: Legs' })
   @IsOptional()
   @IsString({ message: 'Should be a string!' })

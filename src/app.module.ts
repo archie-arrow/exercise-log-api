@@ -5,8 +5,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ExercisesModule } from './exercises/exercises.module';
 import { DatabaseModule } from './database/database.module';
-import { SetsModule } from './sets/sets.module';
+import { WorkoutsModule } from 'src/workouts/workouts.module';
 import { MailModule } from './mail/mail.module';
+import { ProgressModule } from './progress/progress.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { MailModule } from './mail/mail.module';
     AuthModule,
     ExercisesModule,
     DatabaseModule,
-    SetsModule,
+    WorkoutsModule,
     MailModule,
+    ProgressModule,
   ],
   controllers: [],
   providers: [],

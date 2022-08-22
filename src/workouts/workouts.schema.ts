@@ -6,7 +6,7 @@ import { WeightType } from 'src/enums/weight-type.enum';
 import { Exercise } from 'src/exercises/exercises.schema';
 import { User } from 'src/users/users.schema';
 
-export type SetDocument = Set & Document;
+export type WorkoutDocument = Workout & Document;
 
 @Schema({
   toJSON: {
@@ -18,12 +18,12 @@ export type SetDocument = Set & Document;
     },
   },
 })
-export class Set {
+export class Workout {
   @ApiProperty({ example: 'Day 1: Legs' })
   @Prop()
   name: string;
 
-  @ApiProperty({ type: [Exercise] })
+  @ApiProperty({ type: [Exercise], default: [] })
   @Prop()
   exercises: Exercise[];
 
@@ -31,7 +31,7 @@ export class Set {
   @Prop({ default: 0 })
   repeated: number;
 
-  @ApiProperty({ example: '62f1143409793deaec166cad', type: SchemaTypes.String })
+  @ApiProperty({ example: '62f1143409793deaec166cad', type: String })
   @Prop({ type: SchemaTypes.ObjectId, ref: () => User })
   userId: Types.ObjectId;
 
@@ -48,17 +48,17 @@ export class Set {
   withAdditionalEquipment: boolean;
 }
 
-export const SetSchema = SchemaFactory.createForClass(Set);
+export const WorkoutSchema = SchemaFactory.createForClass(Workout);
 
-SetSchema.virtual('exercisesCount').get(function (this: SetDocument) {
+WorkoutSchema.virtual('exercisesCount').get(function (this: WorkoutDocument) {
   return this.exercises.length;
 });
 
-SetSchema.virtual('withAdditionalEquipment').get(function (this: SetDocument) {
+WorkoutSchema.virtual('withAdditionalEquipment').get(function (this: WorkoutDocument) {
   return this.exercises.some((exercise: Exercise) => exercise.weightType !== WeightType.BodyWeight);
 });
 
-SetSchema.virtual('difficulty').get(function (this: SetDocument) {
+WorkoutSchema.virtual('difficulty').get(function (this: WorkoutDocument) {
   if (!this.exercises.length) return Difficulty.Easy;
   const difficulties = [
     {

@@ -42,7 +42,7 @@ export class Exercise {
   @ApiProperty({ example: '62f1143409793deaec166cad' })
   id: string;
 
-  @ApiProperty({ example: '62f1143409793deaec166cad', type: SchemaTypes.String })
+  @ApiProperty({ example: '62f1143409793deaec166cad', type: String })
   @Prop({ type: SchemaTypes.ObjectId, ref: () => User })
   userId: Types.ObjectId;
 }
