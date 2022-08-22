@@ -21,7 +21,7 @@ async function bootstrap() {
   app.useGlobalPipes(new BetterValidationPipe());
 
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: ['http://localhost:4200', 'https://archie-arrow.github.io'],
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
   });
