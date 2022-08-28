@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as fs from 'fs';
 import { addHeaders } from 'src/middlewares/add-headers.middleware';
 import { BetterValidationPipe } from 'src/pipes/better-validator.pipe';
 import { AppModule } from './app.module';
@@ -13,9 +14,13 @@ async function bootstrap() {
     .setTitle('Exercise.log')
     .setDescription('The Exercise.log API documentation')
     .setVersion('1.0')
+    .addServer('https://exercise-log-nest.herokuapp.com', 'Heroku')
+    .addServer('http://localhost:3000', 'Local')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
+
+  fs.writeFileSync(`${__dirname}/../swagger.json`, JSON.stringify(document));
   SwaggerModule.setup('docs', app, document);
 
   app.useGlobalPipes(new BetterValidationPipe());
