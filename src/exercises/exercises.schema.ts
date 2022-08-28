@@ -23,6 +23,10 @@ export class Exercise {
   @Prop()
   name: string;
 
+  @ApiProperty({ example: 'Description', required: false })
+  @Prop({ required: false })
+  description: string;
+
   @ApiProperty({ example: Difficulty.Easy, enum: Difficulty })
   @Prop()
   difficulty: Difficulty;

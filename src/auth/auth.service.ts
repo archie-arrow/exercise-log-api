@@ -1,4 +1,5 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponseDto } from 'src/auth/dto/auth-response.dto';
 import { ForgotPasswordDto } from 'src/auth/dto/forgot-password.dto';
@@ -13,7 +14,12 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService, private jwtService: JwtService, private mailService: MailService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    private mailService: MailService,
+    private config: ConfigService,
+  ) {}
 
   async login(loginDto: LoginDto): Promise<AuthResponseDto> {
     const user = await this.validateUser(loginDto);
@@ -43,10 +49,11 @@ export class AuthService {
     };
   }
 
-  async forgotPassword({ email }: ForgotPasswordDto, url: URL): Promise<void> {
+  async forgotPassword({ email }: ForgotPasswordDto): Promise<void> {
     const user = await this.usersService.getUserByEmail(email);
     if (user) {
       const token = this.jwtService.sign(this.createTokenPayload(user), { expiresIn: '1h' });
+      const url = new URL(this.config.get<string>('CLIENT_URL') + '/reset-password');
       url.searchParams.append('token', token);
 
       await this.mailService.sendResetPassword(user, token, url.toString());

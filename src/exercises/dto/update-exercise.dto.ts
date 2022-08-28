@@ -10,6 +10,11 @@ export class UpdateExerciseDto {
   @IsString({ message: 'Should be a string!' })
   readonly name?: string;
 
+  @ApiProperty({ example: 'Description', required: false })
+  @IsOptional()
+  @IsString({ message: 'Should be a string!' })
+  readonly description?: string;
+
   @ApiProperty({ example: Difficulty.Easy, enum: Difficulty, required: false })
   @IsOptional()
   @IsEnum(Difficulty)

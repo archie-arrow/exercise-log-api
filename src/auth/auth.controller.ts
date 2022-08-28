@@ -1,6 +1,5 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthResponseDto } from 'src/auth/dto/auth-response.dto';
 import { ForgotPasswordDto } from 'src/auth/dto/forgot-password.dto';
@@ -30,9 +29,8 @@ export class AuthController {
   @ApiOperation({ description: 'Reset user password' })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('/forgot-password')
-  forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto, @Req() req: Request): Promise<void> {
-    const resetPasswordUrl = new URL(req.protocol + '://' + req.get('host') + '/reset-password');
-    return this.authService.forgotPassword(forgotPasswordDto, resetPasswordUrl);
+  forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<void> {
+    return this.authService.forgotPassword(forgotPasswordDto);
   }
 
   @ApiResponse({ type: null, status: HttpStatus.NO_CONTENT })
