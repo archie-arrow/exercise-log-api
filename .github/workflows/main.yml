@@ -1,27 +1,20 @@
-name: Deploy GitHub Pages
-
+name: Swagger Docs Deployment
 on:
   push:
     branches:
       - main
 
 jobs:
-  generate-openapi-spec:
+  ci:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
     steps:
-      - name: Upload swagger.json
-        uses: actions/upload-artifact@v2
-        with:
-          name: spec-file
-          path: swagger.json
-  deploy:
-    needs: generate-openapi-spec
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download openapi.json
-        uses: actions/download-artifact@v2
-        with:
-          name: spec-file
+      - uses: actions/checkout@v2
+      
       - name: Generate Swagger UI
         uses: Legion2/swagger-ui-action@v1
         with:
@@ -32,3 +25,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: swagger-ui
+     
