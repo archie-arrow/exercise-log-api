@@ -8,5 +8,6 @@ import { ExercisesService } from './exercises.service';
   imports: [DatabaseModule],
   controllers: [ExercisesController],
   providers: [ExercisesService, JwtAuthGuard],
+  exports: [ExercisesService]
 })
 export class ExercisesModule {}

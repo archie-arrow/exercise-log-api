@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Difficulty } from 'src/enums/difficulty.enum';
 import { ExerciseRegion } from 'src/enums/exercise-region.enum';
 import { WeightType } from 'src/enums/weight-type.enum';
@@ -10,6 +10,7 @@ export class CreateExerciseDto {
   readonly name: string;
 
   @ApiProperty({ example: 'Description', required: false })
+  @IsOptional()
   @IsString({ message: 'Should be a string!' })
   readonly description?: string;
 

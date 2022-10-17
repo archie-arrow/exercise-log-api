@@ -22,6 +22,10 @@ export class ExercisesService {
     return this.exerciseModel.findById(id);
   }
 
+  async getManyExercisesById(ids: string[]): Promise<Exercise[]> {
+    return this.exerciseModel.find({ '_id': { $in: ids } });
+  }
+
   async deleteExercise(id: string): Promise<null> {
     return this.exerciseModel.findByIdAndDelete(id, { new: true });
   }
